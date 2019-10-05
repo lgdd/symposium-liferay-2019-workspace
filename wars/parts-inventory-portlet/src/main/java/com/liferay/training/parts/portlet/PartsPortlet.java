@@ -84,7 +84,7 @@ public class PartsPortlet extends MVCPortlet {
 
 				PortalUtil.copyRequestParameters(request, response);
 
-				response.setRenderParameter("mvcPath",
+				response.getRenderParameters().setValue("mvcPath",
 						"/html/parts/edit_part.jsp");
 			}
 		} else {
@@ -183,7 +183,7 @@ public class PartsPortlet extends MVCPortlet {
 
 				PortalUtil.copyRequestParameters(request, response);
 
-				response.setRenderParameter("mvcPath",
+				response.getRenderParameters().setValue("mvcPath",
 						"/html/parts/edit_part.jsp");
 			}
 		} else {

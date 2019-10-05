@@ -56,9 +56,7 @@
 	<liferay-ui:search-container-results
 		results="<%=ManufacturerLocalServiceUtil
 						.getManufacturersByGroupId(scopeGroupId,
-								searchContainer.getStart(), searchContainer.getEnd())%>"
-		total="<%=ManufacturerLocalServiceUtil
-						.getManufacturersCountByGroupId(scopeGroupId)%>" />
+								searchContainer.getStart(), searchContainer.getEnd())%>"/>
 
 	<liferay-ui:search-container-row
 		className="com.liferay.training.parts.model.Manufacturer"

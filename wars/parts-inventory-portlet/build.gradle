@@ -7,6 +7,4 @@ dependencies {
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel"
 	compileOnly group: "javax.portlet", name: "portlet-api"
 	compileOnly group: "javax.servlet", name: "javax.servlet-api"
-	compile group: 'javax.servlet.jsp.jstl', name: 'jstl-api'
-	compile group: 'org.glassfish.web', name: 'jstl-impl'
 }

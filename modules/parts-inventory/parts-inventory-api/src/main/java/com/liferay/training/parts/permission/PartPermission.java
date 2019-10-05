@@ -1,4 +1,4 @@
-package com.liferay.training.parts.service.permission;
+package com.liferay.training.parts.permission;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;

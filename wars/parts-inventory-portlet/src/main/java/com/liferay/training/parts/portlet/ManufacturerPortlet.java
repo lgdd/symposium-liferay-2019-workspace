@@ -71,7 +71,7 @@ public class ManufacturerPortlet extends MVCPortlet {
 
 				PortalUtil.copyRequestParameters(request, response);
 
-				response.setRenderParameter("mvcPath",
+				response.getRenderParameters().setValue("mvcPath",
 						"/html/manufacturer/edit_manufacturer.jsp");
 			}
 		} else {
@@ -162,7 +162,7 @@ public class ManufacturerPortlet extends MVCPortlet {
 
 				PortalUtil.copyRequestParameters(request, response);
 
-				response.setRenderParameter("mvcPath",
+				response.getRenderParameters().setValue("mvcPath",
 						"/html/manufacturer/edit_manufacturer.jsp");
 			}
 		} else {

@@ -1,5 +1,5 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %>
 <%@ taglib uri="http://liferay.com/tld/security" prefix="liferay-security" %>
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
@@ -28,15 +28,15 @@
 <%@ page import="com.liferay.portal.kernel.theme.ThemeDisplay" %>
 <%@ page import="com.liferay.portal.kernel.util.PortalUtil" %>
 
-<%@ page import="com.liferay.portlet.display.template.PortletDisplayTemplateUtil" %>
+<%@ page import="com.liferay.portlet.display.template.PortletDisplayTemplate" %>
 
 <%@ page import="com.liferay.training.parts.model.Manufacturer"%>
 <%@ page import="com.liferay.training.parts.model.Part"%>
 <%@ page import="com.liferay.training.parts.service.ManufacturerLocalServiceUtil"%>
 <%@ page import="com.liferay.training.parts.service.PartLocalServiceUtil"%>
-<%@ page import="com.liferay.training.parts.service.permission.InventoryPermission"%>
-<%@ page import="com.liferay.training.parts.service.permission.ManufacturerPermission"%>
-<%@ page import="com.liferay.training.parts.service.permission.PartPermission"%>
+<%@ page import="com.liferay.training.parts.permission.InventoryPermission"%>
+<%@ page import="com.liferay.training.parts.permission.ManufacturerPermission"%>
+<%@ page import="com.liferay.training.parts.permission.PartPermission"%>
 
 <%@ page import="com.liferay.training.template.PartsPortletDisplayTemplateUtil" %>
 

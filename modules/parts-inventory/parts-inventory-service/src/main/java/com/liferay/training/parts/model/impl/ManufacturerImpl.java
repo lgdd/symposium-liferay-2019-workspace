@@ -14,6 +14,8 @@
 
 package com.liferay.training.parts.model.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * The extended model implementation for the Manufacturer service. Represents a row in the &quot;Inventory_Manufacturer&quot; database table, with each column mapped to a property of this class.
  *
@@ -23,6 +25,7 @@ package com.liferay.training.parts.model.impl;
  *
  * @author Joe Bloggs
  */
+@ProviderType
 public class ManufacturerImpl extends ManufacturerBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:

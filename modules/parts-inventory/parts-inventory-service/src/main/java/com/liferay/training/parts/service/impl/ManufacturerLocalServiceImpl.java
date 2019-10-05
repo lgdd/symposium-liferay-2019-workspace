@@ -14,11 +14,13 @@
 
 package com.liferay.training.parts.service.impl;
 
+import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.training.parts.model.Manufacturer;
 import com.liferay.training.parts.service.base.ManufacturerLocalServiceBaseImpl;
+import org.osgi.service.component.annotations.Component;
 
 import java.util.Date;
 import java.util.List;
@@ -37,6 +39,7 @@ import java.util.List;
  * @see com.liferay.training.parts.service.base.ManufacturerLocalServiceBaseImpl
  * @see com.liferay.training.parts.service.ManufacturerLocalServiceUtil
  */
+@Component(service = AopService.class)
 public class ManufacturerLocalServiceImpl
 	extends ManufacturerLocalServiceBaseImpl {
 

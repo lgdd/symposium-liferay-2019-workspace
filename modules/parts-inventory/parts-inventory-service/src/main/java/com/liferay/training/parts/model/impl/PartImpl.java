@@ -14,6 +14,8 @@
 
 package com.liferay.training.parts.model.impl;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * The extended model implementation for the Part service. Represents a row in the &quot;Inventory_Part&quot; database table, with each column mapped to a property of this class.
  *
@@ -23,6 +25,7 @@ package com.liferay.training.parts.model.impl;
  *
  * @author Joe Bloggs
  */
+@ProviderType
 public class PartImpl extends PartBaseImpl {
 	/*
 	 * NOTE FOR DEVELOPERS:
