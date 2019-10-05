@@ -1,0 +1,10 @@
+Bundle-Name: parts-inventory-api
+Bundle-SymbolicName: com.liferay.training.parts.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.liferay.training.parts.exception,\
+	com.liferay.training.parts.model,\
+	com.liferay.training.parts.service,\
+	com.liferay.training.parts.service.persistence
+-check: EXPORTS
+-includeresource: META-INF/service.xml=../parts-inventory-service/service.xml
