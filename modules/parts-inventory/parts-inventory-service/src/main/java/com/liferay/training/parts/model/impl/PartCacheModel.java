@@ -1,23 +1,22 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
- * distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *
- *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.training.parts.model.impl;
 
-import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.petra.lang.HashUtil;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.model.CacheModel;
-
 import com.liferay.training.parts.model.Part;
 
 import java.io.Externalizable;
@@ -27,14 +26,41 @@ import java.io.ObjectOutput;
 
 import java.util.Date;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * The cache model class for representing Part in entity cache.
  *
  * @author Joe Bloggs
- * @see Part
  * @generated
  */
+@ProviderType
 public class PartCacheModel implements CacheModel<Part>, Externalizable {
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof PartCacheModel)) {
+			return false;
+		}
+
+		PartCacheModel partCacheModel = (PartCacheModel)obj;
+
+		if (partId == partCacheModel.partId) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return HashUtil.hash(0, partId);
+	}
+
 	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(25);
@@ -79,14 +105,14 @@ public class PartCacheModel implements CacheModel<Part>, Externalizable {
 		partImpl.setManufacturerId(manufacturerId);
 
 		if (name == null) {
-			partImpl.setName(StringPool.BLANK);
+			partImpl.setName("");
 		}
 		else {
 			partImpl.setName(name);
 		}
 
 		if (partNumber == null) {
-			partImpl.setPartNumber(StringPool.BLANK);
+			partImpl.setPartNumber("");
 		}
 		else {
 			partImpl.setPartNumber(partNumber);
@@ -116,7 +142,7 @@ public class PartCacheModel implements CacheModel<Part>, Externalizable {
 		}
 
 		if (userName == null) {
-			partImpl.setUserName(StringPool.BLANK);
+			partImpl.setUserName("");
 		}
 		else {
 			partImpl.setUserName(userName);
@@ -130,13 +156,18 @@ public class PartCacheModel implements CacheModel<Part>, Externalizable {
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		partId = objectInput.readLong();
+
 		companyId = objectInput.readLong();
+
 		groupId = objectInput.readLong();
+
 		userId = objectInput.readLong();
+
 		manufacturerId = objectInput.readLong();
 		name = objectInput.readUTF();
 		partNumber = objectInput.readUTF();
 		orderDate = objectInput.readLong();
+
 		quantity = objectInput.readInt();
 		createDate = objectInput.readLong();
 		modifiedDate = objectInput.readLong();
@@ -144,35 +175,39 @@ public class PartCacheModel implements CacheModel<Part>, Externalizable {
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput objectOutput)
-		throws IOException {
+	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		objectOutput.writeLong(partId);
+
 		objectOutput.writeLong(companyId);
+
 		objectOutput.writeLong(groupId);
+
 		objectOutput.writeLong(userId);
+
 		objectOutput.writeLong(manufacturerId);
 
 		if (name == null) {
-			objectOutput.writeUTF(StringPool.BLANK);
+			objectOutput.writeUTF("");
 		}
 		else {
 			objectOutput.writeUTF(name);
 		}
 
 		if (partNumber == null) {
-			objectOutput.writeUTF(StringPool.BLANK);
+			objectOutput.writeUTF("");
 		}
 		else {
 			objectOutput.writeUTF(partNumber);
 		}
 
 		objectOutput.writeLong(orderDate);
+
 		objectOutput.writeInt(quantity);
 		objectOutput.writeLong(createDate);
 		objectOutput.writeLong(modifiedDate);
 
 		if (userName == null) {
-			objectOutput.writeUTF(StringPool.BLANK);
+			objectOutput.writeUTF("");
 		}
 		else {
 			objectOutput.writeUTF(userName);
@@ -191,4 +226,5 @@ public class PartCacheModel implements CacheModel<Part>, Externalizable {
 	public long createDate;
 	public long modifiedDate;
 	public String userName;
+
 }

@@ -1,6 +1,9 @@
 dependencies {
 	compileOnly project(":modules:parts-inventory:parts-inventory-api")
 
+	compileOnly group: "com.liferay", name: "com.liferay.portlet.display.template.api"
+	compileOnly group: "com.liferay.portal", name: "com.liferay.util.java"
+
 	compileOnly group: "com.liferay.portal", name: "com.liferay.portal.kernel"
 	compileOnly group: "javax.portlet", name: "portlet-api"
 	compileOnly group: "javax.servlet", name: "javax.servlet-api"

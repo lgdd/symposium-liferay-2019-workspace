@@ -1,23 +1,22 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
- * distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *
- *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.training.parts.model.impl;
 
-import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.petra.lang.HashUtil;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.model.CacheModel;
-
 import com.liferay.training.parts.model.Manufacturer;
 
 import java.io.Externalizable;
@@ -27,15 +26,43 @@ import java.io.ObjectOutput;
 
 import java.util.Date;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * The cache model class for representing Manufacturer in entity cache.
  *
  * @author Joe Bloggs
- * @see Manufacturer
  * @generated
  */
-public class ManufacturerCacheModel implements CacheModel<Manufacturer>,
-	Externalizable {
+@ProviderType
+public class ManufacturerCacheModel
+	implements CacheModel<Manufacturer>, Externalizable {
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof ManufacturerCacheModel)) {
+			return false;
+		}
+
+		ManufacturerCacheModel manufacturerCacheModel =
+			(ManufacturerCacheModel)obj;
+
+		if (manufacturerId == manufacturerCacheModel.manufacturerId) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return HashUtil.hash(0, manufacturerId);
+	}
+
 	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(23);
@@ -77,28 +104,28 @@ public class ManufacturerCacheModel implements CacheModel<Manufacturer>,
 		manufacturerImpl.setUserId(userId);
 
 		if (name == null) {
-			manufacturerImpl.setName(StringPool.BLANK);
+			manufacturerImpl.setName("");
 		}
 		else {
 			manufacturerImpl.setName(name);
 		}
 
 		if (emailAddress == null) {
-			manufacturerImpl.setEmailAddress(StringPool.BLANK);
+			manufacturerImpl.setEmailAddress("");
 		}
 		else {
 			manufacturerImpl.setEmailAddress(emailAddress);
 		}
 
 		if (website == null) {
-			manufacturerImpl.setWebsite(StringPool.BLANK);
+			manufacturerImpl.setWebsite("");
 		}
 		else {
 			manufacturerImpl.setWebsite(website);
 		}
 
 		if (phoneNumber == null) {
-			manufacturerImpl.setPhoneNumber(StringPool.BLANK);
+			manufacturerImpl.setPhoneNumber("");
 		}
 		else {
 			manufacturerImpl.setPhoneNumber(phoneNumber);
@@ -119,7 +146,7 @@ public class ManufacturerCacheModel implements CacheModel<Manufacturer>,
 		}
 
 		if (userName == null) {
-			manufacturerImpl.setUserName(StringPool.BLANK);
+			manufacturerImpl.setUserName("");
 		}
 		else {
 			manufacturerImpl.setUserName(userName);
@@ -133,8 +160,11 @@ public class ManufacturerCacheModel implements CacheModel<Manufacturer>,
 	@Override
 	public void readExternal(ObjectInput objectInput) throws IOException {
 		manufacturerId = objectInput.readLong();
+
 		companyId = objectInput.readLong();
+
 		groupId = objectInput.readLong();
+
 		userId = objectInput.readLong();
 		name = objectInput.readUTF();
 		emailAddress = objectInput.readUTF();
@@ -146,36 +176,38 @@ public class ManufacturerCacheModel implements CacheModel<Manufacturer>,
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput objectOutput)
-		throws IOException {
+	public void writeExternal(ObjectOutput objectOutput) throws IOException {
 		objectOutput.writeLong(manufacturerId);
+
 		objectOutput.writeLong(companyId);
+
 		objectOutput.writeLong(groupId);
+
 		objectOutput.writeLong(userId);
 
 		if (name == null) {
-			objectOutput.writeUTF(StringPool.BLANK);
+			objectOutput.writeUTF("");
 		}
 		else {
 			objectOutput.writeUTF(name);
 		}
 
 		if (emailAddress == null) {
-			objectOutput.writeUTF(StringPool.BLANK);
+			objectOutput.writeUTF("");
 		}
 		else {
 			objectOutput.writeUTF(emailAddress);
 		}
 
 		if (website == null) {
-			objectOutput.writeUTF(StringPool.BLANK);
+			objectOutput.writeUTF("");
 		}
 		else {
 			objectOutput.writeUTF(website);
 		}
 
 		if (phoneNumber == null) {
-			objectOutput.writeUTF(StringPool.BLANK);
+			objectOutput.writeUTF("");
 		}
 		else {
 			objectOutput.writeUTF(phoneNumber);
@@ -185,7 +217,7 @@ public class ManufacturerCacheModel implements CacheModel<Manufacturer>,
 		objectOutput.writeLong(modifiedDate);
 
 		if (userName == null) {
-			objectOutput.writeUTF(StringPool.BLANK);
+			objectOutput.writeUTF("");
 		}
 		else {
 			objectOutput.writeUTF(userName);
@@ -203,4 +235,5 @@ public class ManufacturerCacheModel implements CacheModel<Manufacturer>,
 	public long createDate;
 	public long modifiedDate;
 	public String userName;
+
 }

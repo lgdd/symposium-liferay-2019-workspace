@@ -1,22 +1,25 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
- * distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *
- *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.training.parts.service.persistence;
 
 import com.liferay.portal.kernel.service.persistence.BasePersistence;
-
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.training.parts.exception.NoSuchManufacturerException;
 import com.liferay.training.parts.model.Manufacturer;
+
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * The persistence interface for the manufacturer service.
@@ -26,11 +29,12 @@ import com.liferay.training.parts.model.Manufacturer;
  * </p>
  *
  * @author Joe Bloggs
- * @see ManufacturerPersistenceImpl
  * @see ManufacturerUtil
  * @generated
  */
+@ProviderType
 public interface ManufacturerPersistence extends BasePersistence<Manufacturer> {
+
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -38,339 +42,255 @@ public interface ManufacturerPersistence extends BasePersistence<Manufacturer> {
 	 */
 
 	/**
-	* Returns all the manufacturers where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the matching manufacturers
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.training.parts.model.Manufacturer> findByGroupId(
-		long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
+	 * Returns all the manufacturers where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the matching manufacturers
+	 */
+	public java.util.List<Manufacturer> findByGroupId(long groupId);
 
 	/**
-	* Returns a range of all the manufacturers where groupId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.training.parts.model.impl.ManufacturerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param start the lower bound of the range of manufacturers
-	* @param end the upper bound of the range of manufacturers (not inclusive)
-	* @return the range of matching manufacturers
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.training.parts.model.Manufacturer> findByGroupId(
-		long groupId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
+	 * Returns a range of all the manufacturers where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>ManufacturerModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of manufacturers
+	 * @param end the upper bound of the range of manufacturers (not inclusive)
+	 * @return the range of matching manufacturers
+	 */
+	public java.util.List<Manufacturer> findByGroupId(
+		long groupId, int start, int end);
 
 	/**
-	* Returns an ordered range of all the manufacturers where groupId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.training.parts.model.impl.ManufacturerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param start the lower bound of the range of manufacturers
-	* @param end the upper bound of the range of manufacturers (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching manufacturers
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.training.parts.model.Manufacturer> findByGroupId(
+	 * Returns an ordered range of all the manufacturers where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>ManufacturerModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link #findByGroupId(long, int, int, OrderByComparator)}
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of manufacturers
+	 * @param end the upper bound of the range of manufacturers (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of matching manufacturers
+	 */
+	@Deprecated
+	public java.util.List<Manufacturer> findByGroupId(
 		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
+		OrderByComparator<Manufacturer> orderByComparator,
+		boolean useFinderCache);
 
 	/**
-	* Returns the first manufacturer in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching manufacturer
-	* @throws com.liferay.training.parts.NoSuchManufacturerException if a matching manufacturer could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.training.parts.model.Manufacturer findByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.training.parts.NoSuchManufacturerException;
-
-	/**
-	* Returns the first manufacturer in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the first matching manufacturer, or <code>null</code> if a matching manufacturer could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.training.parts.model.Manufacturer fetchByGroupId_First(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the last manufacturer in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching manufacturer
-	* @throws com.liferay.training.parts.NoSuchManufacturerException if a matching manufacturer could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.training.parts.model.Manufacturer findByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.training.parts.NoSuchManufacturerException;
-
-	/**
-	* Returns the last manufacturer in the ordered set where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the last matching manufacturer, or <code>null</code> if a matching manufacturer could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.training.parts.model.Manufacturer fetchByGroupId_Last(
-		long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the manufacturers before and after the current manufacturer in the ordered set where groupId = &#63;.
-	*
-	* @param manufacturerId the primary key of the current manufacturer
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next manufacturer
-	* @throws com.liferay.training.parts.NoSuchManufacturerException if a manufacturer with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.training.parts.model.Manufacturer[] findByGroupId_PrevAndNext(
-		long manufacturerId, long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.training.parts.NoSuchManufacturerException;
-
-	/**
-	* Returns all the manufacturers that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the matching manufacturers that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.training.parts.model.Manufacturer> filterFindByGroupId(
-		long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns a range of all the manufacturers that the user has permission to view where groupId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.training.parts.model.impl.ManufacturerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param start the lower bound of the range of manufacturers
-	* @param end the upper bound of the range of manufacturers (not inclusive)
-	* @return the range of matching manufacturers that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.training.parts.model.Manufacturer> filterFindByGroupId(
-		long groupId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns an ordered range of all the manufacturers that the user has permissions to view where groupId = &#63;.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.training.parts.model.impl.ManufacturerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	* </p>
-	*
-	* @param groupId the group ID
-	* @param start the lower bound of the range of manufacturers
-	* @param end the upper bound of the range of manufacturers (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of matching manufacturers that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.training.parts.model.Manufacturer> filterFindByGroupId(
+	 * Returns an ordered range of all the manufacturers where groupId = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>ManufacturerModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param start the lower bound of the range of manufacturers
+	 * @param end the upper bound of the range of manufacturers (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching manufacturers
+	 */
+	public java.util.List<Manufacturer> findByGroupId(
 		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
+		OrderByComparator<Manufacturer> orderByComparator);
 
 	/**
-	* Returns the manufacturers before and after the current manufacturer in the ordered set of manufacturers that the user has permission to view where groupId = &#63;.
-	*
-	* @param manufacturerId the primary key of the current manufacturer
-	* @param groupId the group ID
-	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
-	* @return the previous, current, and next manufacturer
-	* @throws com.liferay.training.parts.NoSuchManufacturerException if a manufacturer with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.training.parts.model.Manufacturer[] filterFindByGroupId_PrevAndNext(
-		long manufacturerId, long groupId,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.training.parts.NoSuchManufacturerException;
+	 * Returns the first manufacturer in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching manufacturer
+	 * @throws NoSuchManufacturerException if a matching manufacturer could not be found
+	 */
+	public Manufacturer findByGroupId_First(
+			long groupId, OrderByComparator<Manufacturer> orderByComparator)
+		throws NoSuchManufacturerException;
 
 	/**
-	* Removes all the manufacturers where groupId = &#63; from the database.
-	*
-	* @param groupId the group ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
+	 * Returns the first manufacturer in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching manufacturer, or <code>null</code> if a matching manufacturer could not be found
+	 */
+	public Manufacturer fetchByGroupId_First(
+		long groupId, OrderByComparator<Manufacturer> orderByComparator);
 
 	/**
-	* Returns the number of manufacturers where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching manufacturers
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
+	 * Returns the last manufacturer in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching manufacturer
+	 * @throws NoSuchManufacturerException if a matching manufacturer could not be found
+	 */
+	public Manufacturer findByGroupId_Last(
+			long groupId, OrderByComparator<Manufacturer> orderByComparator)
+		throws NoSuchManufacturerException;
 
 	/**
-	* Returns the number of manufacturers that the user has permission to view where groupId = &#63;.
-	*
-	* @param groupId the group ID
-	* @return the number of matching manufacturers that the user has permission to view
-	* @throws SystemException if a system exception occurred
-	*/
-	public int filterCountByGroupId(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException;
+	 * Returns the last manufacturer in the ordered set where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching manufacturer, or <code>null</code> if a matching manufacturer could not be found
+	 */
+	public Manufacturer fetchByGroupId_Last(
+		long groupId, OrderByComparator<Manufacturer> orderByComparator);
 
 	/**
-	* Caches the manufacturer in the entity cache if it is enabled.
-	*
-	* @param manufacturer the manufacturer
-	*/
-	public void cacheResult(
-		com.liferay.training.parts.model.Manufacturer manufacturer);
+	 * Returns the manufacturers before and after the current manufacturer in the ordered set where groupId = &#63;.
+	 *
+	 * @param manufacturerId the primary key of the current manufacturer
+	 * @param groupId the group ID
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next manufacturer
+	 * @throws NoSuchManufacturerException if a manufacturer with the primary key could not be found
+	 */
+	public Manufacturer[] findByGroupId_PrevAndNext(
+			long manufacturerId, long groupId,
+			OrderByComparator<Manufacturer> orderByComparator)
+		throws NoSuchManufacturerException;
 
 	/**
-	* Caches the manufacturers in the entity cache if it is enabled.
-	*
-	* @param manufacturers the manufacturers
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.training.parts.model.Manufacturer> manufacturers);
+	 * Removes all the manufacturers where groupId = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 */
+	public void removeByGroupId(long groupId);
 
 	/**
-	* Creates a new manufacturer with the primary key. Does not add the manufacturer to the database.
-	*
-	* @param manufacturerId the primary key for the new manufacturer
-	* @return the new manufacturer
-	*/
-	public com.liferay.training.parts.model.Manufacturer create(
-		long manufacturerId);
+	 * Returns the number of manufacturers where groupId = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @return the number of matching manufacturers
+	 */
+	public int countByGroupId(long groupId);
 
 	/**
-	* Removes the manufacturer with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param manufacturerId the primary key of the manufacturer
-	* @return the manufacturer that was removed
-	* @throws com.liferay.training.parts.NoSuchManufacturerException if a manufacturer with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.training.parts.model.Manufacturer remove(
-		long manufacturerId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.training.parts.NoSuchManufacturerException;
-
-	public com.liferay.training.parts.model.Manufacturer updateImpl(
-		com.liferay.training.parts.model.Manufacturer manufacturer)
-		throws com.liferay.portal.kernel.exception.SystemException;
+	 * Caches the manufacturer in the entity cache if it is enabled.
+	 *
+	 * @param manufacturer the manufacturer
+	 */
+	public void cacheResult(Manufacturer manufacturer);
 
 	/**
-	* Returns the manufacturer with the primary key or throws a {@link com.liferay.training.parts.NoSuchManufacturerException} if it could not be found.
-	*
-	* @param manufacturerId the primary key of the manufacturer
-	* @return the manufacturer
-	* @throws com.liferay.training.parts.NoSuchManufacturerException if a manufacturer with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.training.parts.model.Manufacturer findByPrimaryKey(
-		long manufacturerId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.training.parts.NoSuchManufacturerException;
+	 * Caches the manufacturers in the entity cache if it is enabled.
+	 *
+	 * @param manufacturers the manufacturers
+	 */
+	public void cacheResult(java.util.List<Manufacturer> manufacturers);
 
 	/**
-	* Returns the manufacturer with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param manufacturerId the primary key of the manufacturer
-	* @return the manufacturer, or <code>null</code> if a manufacturer with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.training.parts.model.Manufacturer fetchByPrimaryKey(
-		long manufacturerId)
-		throws com.liferay.portal.kernel.exception.SystemException;
+	 * Creates a new manufacturer with the primary key. Does not add the manufacturer to the database.
+	 *
+	 * @param manufacturerId the primary key for the new manufacturer
+	 * @return the new manufacturer
+	 */
+	public Manufacturer create(long manufacturerId);
 
 	/**
-	* Returns all the manufacturers.
-	*
-	* @return the manufacturers
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.training.parts.model.Manufacturer> findAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
+	 * Removes the manufacturer with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param manufacturerId the primary key of the manufacturer
+	 * @return the manufacturer that was removed
+	 * @throws NoSuchManufacturerException if a manufacturer with the primary key could not be found
+	 */
+	public Manufacturer remove(long manufacturerId)
+		throws NoSuchManufacturerException;
+
+	public Manufacturer updateImpl(Manufacturer manufacturer);
 
 	/**
-	* Returns a range of all the manufacturers.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.training.parts.model.impl.ManufacturerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	* </p>
-	*
-	* @param start the lower bound of the range of manufacturers
-	* @param end the upper bound of the range of manufacturers (not inclusive)
-	* @return the range of manufacturers
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.training.parts.model.Manufacturer> findAll(
-		int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException;
+	 * Returns the manufacturer with the primary key or throws a <code>NoSuchManufacturerException</code> if it could not be found.
+	 *
+	 * @param manufacturerId the primary key of the manufacturer
+	 * @return the manufacturer
+	 * @throws NoSuchManufacturerException if a manufacturer with the primary key could not be found
+	 */
+	public Manufacturer findByPrimaryKey(long manufacturerId)
+		throws NoSuchManufacturerException;
 
 	/**
-	* Returns an ordered range of all the manufacturers.
-	*
-	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.training.parts.model.impl.ManufacturerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
-	* </p>
-	*
-	* @param start the lower bound of the range of manufacturers
-	* @param end the upper bound of the range of manufacturers (not inclusive)
-	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	* @return the ordered range of manufacturers
-	* @throws SystemException if a system exception occurred
-	*/
-	public java.util.List<com.liferay.training.parts.model.Manufacturer> findAll(
-		int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException;
+	 * Returns the manufacturer with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param manufacturerId the primary key of the manufacturer
+	 * @return the manufacturer, or <code>null</code> if a manufacturer with the primary key could not be found
+	 */
+	public Manufacturer fetchByPrimaryKey(long manufacturerId);
 
 	/**
-	* Removes all the manufacturers from the database.
-	*
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
+	 * Returns all the manufacturers.
+	 *
+	 * @return the manufacturers
+	 */
+	public java.util.List<Manufacturer> findAll();
 
 	/**
-	* Returns the number of manufacturers.
-	*
-	* @return the number of manufacturers
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
+	 * Returns a range of all the manufacturers.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>ManufacturerModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of manufacturers
+	 * @param end the upper bound of the range of manufacturers (not inclusive)
+	 * @return the range of manufacturers
+	 */
+	public java.util.List<Manufacturer> findAll(int start, int end);
+
+	/**
+	 * Returns an ordered range of all the manufacturers.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>ManufacturerModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @deprecated As of Mueller (7.2.x), replaced by {@link #findAll(int, int, OrderByComparator)}
+	 * @param start the lower bound of the range of manufacturers
+	 * @param end the upper bound of the range of manufacturers (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @param useFinderCache whether to use the finder cache
+	 * @return the ordered range of manufacturers
+	 */
+	@Deprecated
+	public java.util.List<Manufacturer> findAll(
+		int start, int end, OrderByComparator<Manufacturer> orderByComparator,
+		boolean useFinderCache);
+
+	/**
+	 * Returns an ordered range of all the manufacturers.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>ManufacturerModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of manufacturers
+	 * @param end the upper bound of the range of manufacturers (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of manufacturers
+	 */
+	public java.util.List<Manufacturer> findAll(
+		int start, int end, OrderByComparator<Manufacturer> orderByComparator);
+
+	/**
+	 * Removes all the manufacturers from the database.
+	 */
+	public void removeAll();
+
+	/**
+	 * Returns the number of manufacturers.
+	 *
+	 * @return the number of manufacturers
+	 */
+	public int countAll();
+
 }

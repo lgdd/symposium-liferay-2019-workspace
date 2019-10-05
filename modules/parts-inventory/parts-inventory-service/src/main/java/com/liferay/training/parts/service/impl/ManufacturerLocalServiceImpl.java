@@ -104,7 +104,7 @@ public class ManufacturerLocalServiceImpl
 	 */
 	public List<Manufacturer> getManufacturersByGroupId(long groupId) throws SystemException {
 		
-		return manufacturerPersistence.filterFindByGroupId(groupId);
+		return manufacturerPersistence.findByGroupId(groupId);
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class ManufacturerLocalServiceImpl
 	 */
 	public List<Manufacturer> getManufacturersByGroupId(long groupId, int start, int end) throws SystemException {
 		
-		return manufacturerPersistence.filterFindByGroupId(groupId, start, end);
+		return manufacturerPersistence.findByGroupId(groupId, start, end);
 	}
 
 	/**
@@ -122,6 +122,6 @@ public class ManufacturerLocalServiceImpl
 	 */
 	public int getManufacturersCountByGroupId(long groupId) throws SystemException {
 		
-		return manufacturerPersistence.filterCountByGroupId(groupId);
+		return manufacturerPersistence.countByGroupId(groupId);
 	}
 }

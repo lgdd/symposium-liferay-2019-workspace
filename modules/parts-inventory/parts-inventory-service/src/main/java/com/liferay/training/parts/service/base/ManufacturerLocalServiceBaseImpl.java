@@ -1,36 +1,41 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
- * The contents of this file are subject to the terms of the Liferay Enterprise
- * Subscription License ("License"). You may not use this file except in
- * compliance with the License. You can obtain a copy of the License by
- * contacting Liferay, Inc. See the License for the specific language governing
- * permissions and limitations under the License, including but not limited to
- * distribution rights of the Software.
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
  *
- *
- *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
  */
 
 package com.liferay.training.parts.service.base;
 
-import com.liferay.portal.kernel.bean.BeanReference;
-import com.liferay.portal.kernel.bean.IdentifiableBean;
+import com.liferay.portal.aop.AopService;
+import com.liferay.portal.kernel.dao.db.DB;
+import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DefaultActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.IndexableActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.Projection;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.model.PersistedModel;
+import com.liferay.portal.kernel.module.framework.service.IdentifiableOSGiService;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
-import com.liferay.portal.kernel.util.OrderByComparator;
-import com.liferay.portal.kernel.model.PersistedModel;
 import com.liferay.portal.kernel.service.BaseLocalServiceImpl;
-import com.liferay.portal.kernel.service.PersistedModelLocalServiceRegistryUtil;
-import com.liferay.portal.kernel.service.persistence.UserPersistence;
-
+import com.liferay.portal.kernel.service.PersistedModelLocalService;
+import com.liferay.portal.kernel.transaction.Transactional;
+import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.training.parts.model.Manufacturer;
 import com.liferay.training.parts.service.ManufacturerLocalService;
 import com.liferay.training.parts.service.persistence.ManufacturerPersistence;
@@ -42,6 +47,9 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.service.component.annotations.Reference;
+
 /**
  * Provides the base implementation for the manufacturer local service.
  *
@@ -51,16 +59,17 @@ import javax.sql.DataSource;
  *
  * @author Joe Bloggs
  * @see com.liferay.training.parts.service.impl.ManufacturerLocalServiceImpl
- * @see com.liferay.training.parts.service.ManufacturerLocalServiceUtil
  * @generated
  */
+@ProviderType
 public abstract class ManufacturerLocalServiceBaseImpl
-	extends BaseLocalServiceImpl implements ManufacturerLocalService,
-		IdentifiableBean {
+	extends BaseLocalServiceImpl
+	implements ManufacturerLocalService, AopService, IdentifiableOSGiService {
+
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
-	 * Never modify or reference this class directly. Always use {@link com.liferay.training.parts.service.ManufacturerLocalServiceUtil} to access the manufacturer local service.
+	 * Never modify or reference this class directly. Use <code>ManufacturerLocalService</code> via injection or a <code>org.osgi.util.tracker.ServiceTracker</code> or use <code>com.liferay.training.parts.service.ManufacturerLocalServiceUtil</code>.
 	 */
 
 	/**
@@ -68,12 +77,10 @@ public abstract class ManufacturerLocalServiceBaseImpl
 	 *
 	 * @param manufacturer the manufacturer
 	 * @return the manufacturer that was added
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
-	public Manufacturer addManufacturer(Manufacturer manufacturer)
-		throws SystemException {
+	public Manufacturer addManufacturer(Manufacturer manufacturer) {
 		manufacturer.setNew(true);
 
 		return manufacturerPersistence.update(manufacturer);
@@ -86,6 +93,7 @@ public abstract class ManufacturerLocalServiceBaseImpl
 	 * @return the new manufacturer
 	 */
 	@Override
+	@Transactional(enabled = false)
 	public Manufacturer createManufacturer(long manufacturerId) {
 		return manufacturerPersistence.create(manufacturerId);
 	}
@@ -96,12 +104,13 @@ public abstract class ManufacturerLocalServiceBaseImpl
 	 * @param manufacturerId the primary key of the manufacturer
 	 * @return the manufacturer that was removed
 	 * @throws PortalException if a manufacturer with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
+	 * @throws SystemException
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	public Manufacturer deleteManufacturer(long manufacturerId)
 		throws PortalException, SystemException {
+
 		return manufacturerPersistence.remove(manufacturerId);
 	}
 
@@ -111,12 +120,13 @@ public abstract class ManufacturerLocalServiceBaseImpl
 	 * @param manufacturer the manufacturer
 	 * @return the manufacturer that was removed
 	 * @throws PortalException
-	 * @throws SystemException if a system exception occurred
+	 * @throws SystemException
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	public Manufacturer deleteManufacturer(Manufacturer manufacturer)
 		throws PortalException, SystemException {
+
 		return manufacturerPersistence.remove(manufacturer);
 	}
 
@@ -124,8 +134,8 @@ public abstract class ManufacturerLocalServiceBaseImpl
 	public DynamicQuery dynamicQuery() {
 		Class<?> clazz = getClass();
 
-		return DynamicQueryFactoryUtil.forClass(Manufacturer.class,
-			clazz.getClassLoader());
+		return DynamicQueryFactoryUtil.forClass(
+			Manufacturer.class, clazz.getClassLoader());
 	}
 
 	/**
@@ -133,12 +143,9 @@ public abstract class ManufacturerLocalServiceBaseImpl
 	 *
 	 * @param dynamicQuery the dynamic query
 	 * @return the matching rows
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery)
-		throws SystemException {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return manufacturerPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -146,28 +153,27 @@ public abstract class ManufacturerLocalServiceBaseImpl
 	 * Performs a dynamic query on the database and returns a range of the matching rows.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.training.parts.model.impl.ManufacturerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>com.liferay.training.parts.model.impl.ManufacturerModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param dynamicQuery the dynamic query
 	 * @param start the lower bound of the range of model instances
 	 * @param end the upper bound of the range of model instances (not inclusive)
 	 * @return the range of matching rows
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end)
-		throws SystemException {
-		return manufacturerPersistence.findWithDynamicQuery(dynamicQuery,
-			start, end);
+	public <T> List<T> dynamicQuery(
+		DynamicQuery dynamicQuery, int start, int end) {
+
+		return manufacturerPersistence.findWithDynamicQuery(
+			dynamicQuery, start, end);
 	}
 
 	/**
 	 * Performs a dynamic query on the database and returns an ordered range of the matching rows.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.training.parts.model.impl.ManufacturerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>com.liferay.training.parts.model.impl.ManufacturerModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param dynamicQuery the dynamic query
@@ -175,47 +181,44 @@ public abstract class ManufacturerLocalServiceBaseImpl
 	 * @param end the upper bound of the range of model instances (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching rows
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		return manufacturerPersistence.findWithDynamicQuery(dynamicQuery,
-			start, end, orderByComparator);
+	public <T> List<T> dynamicQuery(
+		DynamicQuery dynamicQuery, int start, int end,
+		OrderByComparator<T> orderByComparator) {
+
+		return manufacturerPersistence.findWithDynamicQuery(
+			dynamicQuery, start, end, orderByComparator);
 	}
 
 	/**
-	 * Returns the number of rows that match the dynamic query.
+	 * Returns the number of rows matching the dynamic query.
 	 *
 	 * @param dynamicQuery the dynamic query
-	 * @return the number of rows that match the dynamic query
-	 * @throws SystemException if a system exception occurred
+	 * @return the number of rows matching the dynamic query
 	 */
 	@Override
-	public long dynamicQueryCount(DynamicQuery dynamicQuery)
-		throws SystemException {
+	public long dynamicQueryCount(DynamicQuery dynamicQuery) {
 		return manufacturerPersistence.countWithDynamicQuery(dynamicQuery);
 	}
 
 	/**
-	 * Returns the number of rows that match the dynamic query.
+	 * Returns the number of rows matching the dynamic query.
 	 *
 	 * @param dynamicQuery the dynamic query
 	 * @param projection the projection to apply to the query
-	 * @return the number of rows that match the dynamic query
-	 * @throws SystemException if a system exception occurred
+	 * @return the number of rows matching the dynamic query
 	 */
 	@Override
-	public long dynamicQueryCount(DynamicQuery dynamicQuery,
-		Projection projection) throws SystemException {
-		return manufacturerPersistence.countWithDynamicQuery(dynamicQuery,
-			projection);
+	public long dynamicQueryCount(
+		DynamicQuery dynamicQuery, Projection projection) {
+
+		return manufacturerPersistence.countWithDynamicQuery(
+			dynamicQuery, projection);
 	}
 
 	@Override
-	public Manufacturer fetchManufacturer(long manufacturerId)
-		throws SystemException {
+	public Manufacturer fetchManufacturer(long manufacturerId) {
 		return manufacturerPersistence.fetchByPrimaryKey(manufacturerId);
 	}
 
@@ -225,17 +228,71 @@ public abstract class ManufacturerLocalServiceBaseImpl
 	 * @param manufacturerId the primary key of the manufacturer
 	 * @return the manufacturer
 	 * @throws PortalException if a manufacturer with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
 	public Manufacturer getManufacturer(long manufacturerId)
-		throws PortalException, SystemException {
+		throws PortalException {
+
 		return manufacturerPersistence.findByPrimaryKey(manufacturerId);
 	}
 
 	@Override
+	public ActionableDynamicQuery getActionableDynamicQuery() {
+		ActionableDynamicQuery actionableDynamicQuery =
+			new DefaultActionableDynamicQuery();
+
+		actionableDynamicQuery.setBaseLocalService(manufacturerLocalService);
+		actionableDynamicQuery.setClassLoader(getClassLoader());
+		actionableDynamicQuery.setModelClass(Manufacturer.class);
+
+		actionableDynamicQuery.setPrimaryKeyPropertyName("manufacturerId");
+
+		return actionableDynamicQuery;
+	}
+
+	@Override
+	public IndexableActionableDynamicQuery
+		getIndexableActionableDynamicQuery() {
+
+		IndexableActionableDynamicQuery indexableActionableDynamicQuery =
+			new IndexableActionableDynamicQuery();
+
+		indexableActionableDynamicQuery.setBaseLocalService(
+			manufacturerLocalService);
+		indexableActionableDynamicQuery.setClassLoader(getClassLoader());
+		indexableActionableDynamicQuery.setModelClass(Manufacturer.class);
+
+		indexableActionableDynamicQuery.setPrimaryKeyPropertyName(
+			"manufacturerId");
+
+		return indexableActionableDynamicQuery;
+	}
+
+	protected void initActionableDynamicQuery(
+		ActionableDynamicQuery actionableDynamicQuery) {
+
+		actionableDynamicQuery.setBaseLocalService(manufacturerLocalService);
+		actionableDynamicQuery.setClassLoader(getClassLoader());
+		actionableDynamicQuery.setModelClass(Manufacturer.class);
+
+		actionableDynamicQuery.setPrimaryKeyPropertyName("manufacturerId");
+	}
+
+	/**
+	 * @throws PortalException
+	 */
+	@Override
+	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
+		throws PortalException {
+
+		return manufacturerLocalService.deleteManufacturer(
+			(Manufacturer)persistedModel);
+	}
+
+	@Override
 	public PersistedModel getPersistedModel(Serializable primaryKeyObj)
-		throws PortalException, SystemException {
+		throws PortalException {
+
 		return manufacturerPersistence.findByPrimaryKey(primaryKeyObj);
 	}
 
@@ -243,17 +300,15 @@ public abstract class ManufacturerLocalServiceBaseImpl
 	 * Returns a range of all the manufacturers.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.training.parts.model.impl.ManufacturerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code> will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not <code>com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS</code>), then the query will include the default ORDER BY logic from <code>com.liferay.training.parts.model.impl.ManufacturerModelImpl</code>. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of manufacturers
 	 * @param end the upper bound of the range of manufacturers (not inclusive)
 	 * @return the range of manufacturers
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public List<Manufacturer> getManufacturers(int start, int end)
-		throws SystemException {
+	public List<Manufacturer> getManufacturers(int start, int end) {
 		return manufacturerPersistence.findAll(start, end);
 	}
 
@@ -261,10 +316,9 @@ public abstract class ManufacturerLocalServiceBaseImpl
 	 * Returns the number of manufacturers.
 	 *
 	 * @return the number of manufacturers
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
-	public int getManufacturersCount() throws SystemException {
+	public int getManufacturersCount() {
 		return manufacturerPersistence.countAll();
 	}
 
@@ -273,237 +327,34 @@ public abstract class ManufacturerLocalServiceBaseImpl
 	 *
 	 * @param manufacturer the manufacturer
 	 * @return the manufacturer that was updated
-	 * @throws SystemException if a system exception occurred
 	 */
 	@Indexable(type = IndexableType.REINDEX)
 	@Override
-	public Manufacturer updateManufacturer(Manufacturer manufacturer)
-		throws SystemException {
+	public Manufacturer updateManufacturer(Manufacturer manufacturer) {
 		return manufacturerPersistence.update(manufacturer);
 	}
 
-	/**
-	 * Returns the manufacturer local service.
-	 *
-	 * @return the manufacturer local service
-	 */
-	public com.liferay.training.parts.service.ManufacturerLocalService getManufacturerLocalService() {
-		return manufacturerLocalService;
-	}
-
-	/**
-	 * Sets the manufacturer local service.
-	 *
-	 * @param manufacturerLocalService the manufacturer local service
-	 */
-	public void setManufacturerLocalService(
-		com.liferay.training.parts.service.ManufacturerLocalService manufacturerLocalService) {
-		this.manufacturerLocalService = manufacturerLocalService;
-	}
-
-	/**
-	 * Returns the manufacturer persistence.
-	 *
-	 * @return the manufacturer persistence
-	 */
-	public ManufacturerPersistence getManufacturerPersistence() {
-		return manufacturerPersistence;
-	}
-
-	/**
-	 * Sets the manufacturer persistence.
-	 *
-	 * @param manufacturerPersistence the manufacturer persistence
-	 */
-	public void setManufacturerPersistence(
-		ManufacturerPersistence manufacturerPersistence) {
-		this.manufacturerPersistence = manufacturerPersistence;
-	}
-
-	/**
-	 * Returns the part local service.
-	 *
-	 * @return the part local service
-	 */
-	public com.liferay.training.parts.service.PartLocalService getPartLocalService() {
-		return partLocalService;
-	}
-
-	/**
-	 * Sets the part local service.
-	 *
-	 * @param partLocalService the part local service
-	 */
-	public void setPartLocalService(
-		com.liferay.training.parts.service.PartLocalService partLocalService) {
-		this.partLocalService = partLocalService;
-	}
-
-	/**
-	 * Returns the part persistence.
-	 *
-	 * @return the part persistence
-	 */
-	public PartPersistence getPartPersistence() {
-		return partPersistence;
-	}
-
-	/**
-	 * Sets the part persistence.
-	 *
-	 * @param partPersistence the part persistence
-	 */
-	public void setPartPersistence(PartPersistence partPersistence) {
-		this.partPersistence = partPersistence;
-	}
-
-	/**
-	 * Returns the counter local service.
-	 *
-	 * @return the counter local service
-	 */
-	public com.liferay.counter.service.CounterLocalService getCounterLocalService() {
-		return counterLocalService;
-	}
-
-	/**
-	 * Sets the counter local service.
-	 *
-	 * @param counterLocalService the counter local service
-	 */
-	public void setCounterLocalService(
-		com.liferay.counter.service.CounterLocalService counterLocalService) {
-		this.counterLocalService = counterLocalService;
-	}
-
-	/**
-	 * Returns the resource local service.
-	 *
-	 * @return the resource local service
-	 */
-	public com.liferay.portal.service.ResourceLocalService getResourceLocalService() {
-		return resourceLocalService;
-	}
-
-	/**
-	 * Sets the resource local service.
-	 *
-	 * @param resourceLocalService the resource local service
-	 */
-	public void setResourceLocalService(
-		com.liferay.portal.service.ResourceLocalService resourceLocalService) {
-		this.resourceLocalService = resourceLocalService;
-	}
-
-	/**
-	 * Returns the user local service.
-	 *
-	 * @return the user local service
-	 */
-	public com.liferay.portal.service.UserLocalService getUserLocalService() {
-		return userLocalService;
-	}
-
-	/**
-	 * Sets the user local service.
-	 *
-	 * @param userLocalService the user local service
-	 */
-	public void setUserLocalService(
-		com.liferay.portal.service.UserLocalService userLocalService) {
-		this.userLocalService = userLocalService;
-	}
-
-	/**
-	 * Returns the user remote service.
-	 *
-	 * @return the user remote service
-	 */
-	public com.liferay.portal.service.UserService getUserService() {
-		return userService;
-	}
-
-	/**
-	 * Sets the user remote service.
-	 *
-	 * @param userService the user remote service
-	 */
-	public void setUserService(
-		com.liferay.portal.service.UserService userService) {
-		this.userService = userService;
-	}
-
-	/**
-	 * Returns the user persistence.
-	 *
-	 * @return the user persistence
-	 */
-	public UserPersistence getUserPersistence() {
-		return userPersistence;
-	}
-
-	/**
-	 * Sets the user persistence.
-	 *
-	 * @param userPersistence the user persistence
-	 */
-	public void setUserPersistence(UserPersistence userPersistence) {
-		this.userPersistence = userPersistence;
-	}
-
-	public void afterPropertiesSet() {
-		Class<?> clazz = getClass();
-
-		_classLoader = clazz.getClassLoader();
-
-		PersistedModelLocalServiceRegistryUtil.register("com.liferay.training.parts.model.Manufacturer",
-			manufacturerLocalService);
-	}
-
-	public void destroy() {
-		PersistedModelLocalServiceRegistryUtil.unregister(
-			"com.liferay.training.parts.model.Manufacturer");
-	}
-
-	/**
-	 * Returns the Spring bean ID for this bean.
-	 *
-	 * @return the Spring bean ID for this bean
-	 */
 	@Override
-	public String getBeanIdentifier() {
-		return _beanIdentifier;
-	}
-
-	/**
-	 * Sets the Spring bean ID for this bean.
-	 *
-	 * @param beanIdentifier the Spring bean ID for this bean
-	 */
-	@Override
-	public void setBeanIdentifier(String beanIdentifier) {
-		_beanIdentifier = beanIdentifier;
+	public Class<?>[] getAopInterfaces() {
+		return new Class<?>[] {
+			ManufacturerLocalService.class, IdentifiableOSGiService.class,
+			PersistedModelLocalService.class
+		};
 	}
 
 	@Override
-	public Object invokeMethod(String name, String[] parameterTypes,
-		Object[] arguments) throws Throwable {
-		Thread currentThread = Thread.currentThread();
+	public void setAopProxy(Object aopProxy) {
+		manufacturerLocalService = (ManufacturerLocalService)aopProxy;
+	}
 
-		ClassLoader contextClassLoader = currentThread.getContextClassLoader();
-
-		if (contextClassLoader != _classLoader) {
-			currentThread.setContextClassLoader(_classLoader);
-		}
-
-		try {
-			return _clpInvoker.invokeMethod(name, parameterTypes, arguments);
-		}
-		finally {
-			if (contextClassLoader != _classLoader) {
-				currentThread.setContextClassLoader(contextClassLoader);
-			}
-		}
+	/**
+	 * Returns the OSGi service identifier.
+	 *
+	 * @return the OSGi service identifier
+	 */
+	@Override
+	public String getOSGiServiceIdentifier() {
+		return ManufacturerLocalService.class.getName();
 	}
 
 	protected Class<?> getModelClass() {
@@ -515,16 +366,21 @@ public abstract class ManufacturerLocalServiceBaseImpl
 	}
 
 	/**
-	 * Performs an SQL query.
+	 * Performs a SQL query.
 	 *
 	 * @param sql the sql query
 	 */
-	protected void runSQL(String sql) throws SystemException {
+	protected void runSQL(String sql) {
 		try {
 			DataSource dataSource = manufacturerPersistence.getDataSource();
 
-			SqlUpdate sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(dataSource,
-					sql, new int[0]);
+			DB db = DBManagerUtil.getDB();
+
+			sql = db.buildSQL(sql);
+			sql = PortalUtil.transformSQL(sql);
+
+			SqlUpdate sqlUpdate = SqlUpdateFactoryUtil.getSqlUpdate(
+				dataSource, sql);
 
 			sqlUpdate.update();
 		}
@@ -533,25 +389,28 @@ public abstract class ManufacturerLocalServiceBaseImpl
 		}
 	}
 
-	@BeanReference(type = com.liferay.training.parts.service.ManufacturerLocalService.class)
-	protected com.liferay.training.parts.service.ManufacturerLocalService manufacturerLocalService;
-	@BeanReference(type = ManufacturerPersistence.class)
+	protected ManufacturerLocalService manufacturerLocalService;
+
+	@Reference
 	protected ManufacturerPersistence manufacturerPersistence;
-	@BeanReference(type = com.liferay.training.parts.service.PartLocalService.class)
-	protected com.liferay.training.parts.service.PartLocalService partLocalService;
-	@BeanReference(type = PartPersistence.class)
+
+	@Reference
 	protected PartPersistence partPersistence;
-	@BeanReference(type = com.liferay.counter.service.CounterLocalService.class)
-	protected com.liferay.counter.service.CounterLocalService counterLocalService;
-	@BeanReference(type = com.liferay.portal.service.ResourceLocalService.class)
-	protected com.liferay.portal.service.ResourceLocalService resourceLocalService;
-	@BeanReference(type = com.liferay.portal.service.UserLocalService.class)
-	protected com.liferay.portal.service.UserLocalService userLocalService;
-	@BeanReference(type = com.liferay.portal.service.UserService.class)
-	protected com.liferay.portal.service.UserService userService;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
-	private String _beanIdentifier;
-	private ClassLoader _classLoader;
-	private ManufacturerLocalServiceClpInvoker _clpInvoker = new ManufacturerLocalServiceClpInvoker();
+
+	@Reference
+	protected com.liferay.counter.kernel.service.CounterLocalService
+		counterLocalService;
+
+	@Reference
+	protected com.liferay.portal.kernel.service.ClassNameLocalService
+		classNameLocalService;
+
+	@Reference
+	protected com.liferay.portal.kernel.service.ResourceLocalService
+		resourceLocalService;
+
+	@Reference
+	protected com.liferay.portal.kernel.service.UserLocalService
+		userLocalService;
+
 }

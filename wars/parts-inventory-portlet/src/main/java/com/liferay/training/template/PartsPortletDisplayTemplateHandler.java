@@ -10,7 +10,7 @@ import com.liferay.portal.kernel.portletdisplaytemplate.BasePortletDisplayTempla
 import com.liferay.portal.kernel.template.TemplateVariableGroup;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.PortalUtil;
-import com.liferay.portlet.display.template.PortletDisplayTemplateConstants;
+import com.liferay.portlet.display.template.constants.PortletDisplayTemplateConstants;
 import com.liferay.training.parts.model.Part;
 import com.liferay.training.util.PortletKeys;
 import com.liferay.util.portlet.PortletProps;
