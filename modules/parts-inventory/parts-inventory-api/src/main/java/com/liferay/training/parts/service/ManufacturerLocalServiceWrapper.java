@@ -14,7 +14,7 @@
 
 package com.liferay.training.parts.service;
 
-import com.liferay.portal.service.ServiceWrapper;
+import com.liferay.portal.kernel.service.ServiceWrapper;
 
 /**
  * Provides a wrapper for {@link ManufacturerLocalService}.

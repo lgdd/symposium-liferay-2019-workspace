@@ -15,7 +15,7 @@
 package com.liferay.training.parts.model;
 
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.model.ModelWrapper;
+import com.liferay.portal.kernel.model.ModelWrapper;
 
 import java.util.Date;
 import java.util.HashMap;

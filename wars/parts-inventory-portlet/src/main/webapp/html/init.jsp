@@ -23,12 +23,12 @@
 <%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.WebKeys" %>
-<%@ page import="com.liferay.portal.model.Group"%>
-<%@ page import="com.liferay.portal.security.permission.ActionKeys"%>
-<%@ page import="com.liferay.portal.theme.ThemeDisplay" %>
-<%@ page import="com.liferay.portal.util.PortalUtil" %>
+<%@ page import="com.liferay.portal.kernel.model.Group"%>
+<%@ page import="com.liferay.portal.kernel.security.permission.ActionKeys"%>
+<%@ page import="com.liferay.portal.kernel.theme.ThemeDisplay" %>
+<%@ page import="com.liferay.portal.kernel.util.PortalUtil" %>
 
-<%@ page import="com.liferay.portlet.portletdisplaytemplate.util.PortletDisplayTemplateUtil" %>
+<%@ page import="com.liferay.portlet.display.template.PortletDisplayTemplateUtil" %>
 
 <%@ page import="com.liferay.training.parts.model.Manufacturer"%>
 <%@ page import="com.liferay.training.parts.model.Part"%>

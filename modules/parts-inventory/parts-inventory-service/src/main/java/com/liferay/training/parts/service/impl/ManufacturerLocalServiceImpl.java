@@ -16,7 +16,7 @@ package com.liferay.training.parts.service.impl;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.model.ResourceConstants;
+import com.liferay.portal.kernel.model.ResourceConstants;
 import com.liferay.training.parts.model.Manufacturer;
 import com.liferay.training.parts.service.base.ManufacturerLocalServiceBaseImpl;
 

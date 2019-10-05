@@ -14,7 +14,7 @@
 
 package com.liferay.training.parts.service.persistence;
 
-import com.liferay.portal.service.persistence.BasePersistence;
+import com.liferay.portal.kernel.service.persistence.BasePersistence;
 
 import com.liferay.training.parts.model.Part;
 

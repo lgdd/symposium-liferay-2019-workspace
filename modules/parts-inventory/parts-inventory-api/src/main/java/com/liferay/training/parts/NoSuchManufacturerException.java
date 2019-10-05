@@ -14,7 +14,7 @@
 
 package com.liferay.training.parts;
 
-import com.liferay.portal.NoSuchModelException;
+import com.liferay.portal.kernel.exception.NoSuchModelException;
 
 /**
  * @author Joe Bloggs

@@ -18,16 +18,15 @@ long displayStyleGroupId = GetterUtil.getLong(portletPreferences.getValue("displ
 			%>
 
 			<liferay-ui:ddm-template-selector
-				classNameId="<%= PortalUtil.getClassNameId(templateHandler.getClassName()) %>"
 				displayStyle="<%= displayStyle %>"
 				displayStyleGroupId="<%= displayStyleGroupId %>"
 				refreshURL="<%= PortalUtil.getCurrentURL(request) %>"
 				showEmptyOption="<%= true %>"
-			/>
+			className="<%= PortalUtil.getClassNameId(templateHandler.getClassName()) %>"/>
 		</div>
 	</aui:fieldset>
 
 	<aui:button-row>
 		<aui:button type="submit" />
 	</aui:button-row>
-</aui:form>
+</aui:form>i:form>

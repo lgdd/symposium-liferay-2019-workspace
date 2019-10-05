@@ -14,7 +14,7 @@
 
 package com.liferay.training.parts.service;
 
-import com.liferay.portal.service.InvokableLocalService;
+import com.liferay.portal.kernel.service.InvokableLocalService;
 
 /**
  * @author Joe Bloggs

@@ -14,7 +14,7 @@
 
 package com.liferay.training.parts.model;
 
-import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.kernel.model.PersistedModel;
 
 /**
  * The extended model interface for the Part service. Represents a row in the &quot;Inventory_Part&quot; database table, with each column mapped to a property of this class.
