@@ -33,6 +33,8 @@
 <%@ page import="com.liferay.training.parts.service.ManufacturerLocalServiceUtil"%>
 <%@ page import="com.liferay.training.parts.service.PartLocalServiceUtil"%>
 <%@ page import="com.liferay.training.parts.service.permission.PartPermissionChecker" %>
+<%@ page import="com.liferay.training.parts.service.permission.ManufacturerPermissionChecker" %>
+<%@ page import="com.liferay.training.web.constants.MVCCommandNames" %>
 
 
 <liferay-theme:defineObjects />

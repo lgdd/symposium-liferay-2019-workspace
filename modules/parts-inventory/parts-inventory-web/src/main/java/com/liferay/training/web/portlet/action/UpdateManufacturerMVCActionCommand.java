@@ -8,31 +8,31 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalUtil;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.training.parts.model.Part;
-import com.liferay.training.parts.service.PartLocalService;
-import com.liferay.training.web.constants.MVCCommandNames;
+import com.liferay.training.parts.model.Manufacturer;
+import com.liferay.training.parts.service.ManufacturerLocalService;
 import com.liferay.training.web.constants.InventoryPortletKeys;
-import com.liferay.training.web.validator.PartValidator;
+import com.liferay.training.web.constants.MVCCommandNames;
+import com.liferay.training.web.validator.ManufacturerValidator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component(
 	immediate = true,
 	property = {
-		"javax.portlet.name=" + InventoryPortletKeys.PARTS,
-		"mvc.command.name=" + MVCCommandNames.UPDATE_PART
+		"javax.portlet.name=" + InventoryPortletKeys.MANUFACTURER,
+		"mvc.command.name=" + MVCCommandNames.UPDATE_MANUFACTURER
 	},
 	service = MVCActionCommand.class
 )
-public class UpdatePartMVCActionCommand extends BaseMVCActionCommand {
+public class UpdateManufacturerMVCActionCommand extends BaseMVCActionCommand {
 
 	@Override
 	public void doProcessAction(ActionRequest request, ActionResponse response)
@@ -42,43 +42,34 @@ public class UpdatePartMVCActionCommand extends BaseMVCActionCommand {
 										.getAttribute(WebKeys.THEME_DISPLAY);
 		long groupId = themeDisplay.getScopeGroupId();
 
-		long partId = ParamUtil.getLong(request, "partId");
-		Part part = null;
+		long manufacturerId = ParamUtil.getLong(request, "manufacturerId");
+		Manufacturer manufacturer = null;
 
 		try {
-			part = _partLocalService
-											.fetchPart(partId);
+			manufacturer = _manufacturerLocalService
+											.fetchManufacturer(manufacturerId);
 		} catch (SystemException se) {
 			_log.error(se);
+			return;
 		}
 
 		if (themeDisplay.getPermissionChecker().hasPermission(groupId,
-										"com.liferay.training.parts.model.Part",
-										part.getPartId(), "UPDATE")) {
+										"com.liferay.training.parts.model.Manufacturer",
+										manufacturer.getManufacturerId(), "UPDATE")) {
 
-			Map<Locale, String> nameMap = LocalizationUtil.getLocalizationMap(
-											request, "name");
-			part.setNameMap(nameMap);
-
-			part.setPartNumber(ParamUtil.getString(request, "partNumber"));
-
-			int orderDateMonth = ParamUtil.getInteger(request, "orderDateMonth");
-			int orderDateDay = ParamUtil.getInteger(request, "orderDateDay");
-			int orderDateYear = ParamUtil.getInteger(request, "orderDateYear");
-			Date orderDate = PortalUtil.getDate(orderDateMonth, orderDateDay,
-											orderDateYear);
-			part.setOrderDate(orderDate);
-
-			part.setQuantity(ParamUtil.getInteger(request, "quantity"));
-			part.setManufacturerId(ParamUtil.getLong(request, "manufacturerId"));
+			manufacturer.setName(ParamUtil.getString(request, "name"));
+			manufacturer.setEmailAddress(ParamUtil.getString(request, "emailAddress"));
+			manufacturer.setWebsite(ParamUtil.getString(request, "website"));
+			manufacturer.setPhoneNumber(ParamUtil.getString(request, "phoneNumber"));
 
 			List<String> errors = new ArrayList<String>();
 
-			if (PartValidator.validatePart(part, errors)) {
+			if (ManufacturerValidator
+											.validateManufacturer(manufacturer, errors)) {
 
-				_partLocalService.updatePart(part);
+				_manufacturerLocalService.updateManufacturer(manufacturer);
 
-				SessionMessages.add(request, "part-updated");
+				SessionMessages.add(request, "manufacturer-updated");
 
 				sendRedirect(request, response);
 			} else {
@@ -89,7 +80,7 @@ public class UpdatePartMVCActionCommand extends BaseMVCActionCommand {
 				PortalUtil.copyRequestParameters(request, response);
 
 				response.getRenderParameters().setValue("mvcPath",
-												"/html/parts/edit_part.jsp");
+												"/html/manufacturer/edit_manufacturer.jsp");
 			}
 		} else {
 			SessionErrors.add(request, "permission-error");
@@ -98,7 +89,7 @@ public class UpdatePartMVCActionCommand extends BaseMVCActionCommand {
 	}
 
 	@Reference
-	private PartLocalService _partLocalService;
+	private ManufacturerLocalService _manufacturerLocalService;
 
-	private static final Log _log = LogFactoryUtil.getLog(UpdatePartMVCActionCommand.class);
+	private static final Log _log = LogFactoryUtil.getLog(UpdateManufacturerMVCActionCommand.class);
 }

@@ -1,6 +1,5 @@
 package com.liferay.training.web.portlet.action;
 
-import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
@@ -8,10 +7,12 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.*;
-import com.liferay.training.parts.service.PartLocalService;
-import com.liferay.training.web.constants.MVCCommandNames;
+import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.training.parts.service.ManufacturerLocalService;
 import com.liferay.training.web.constants.InventoryPortletKeys;
+import com.liferay.training.web.constants.MVCCommandNames;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
@@ -21,12 +22,12 @@ import javax.portlet.ActionResponse;
 @Component(
 	immediate = true,
 	property = {
-		"javax.portlet.name=" + InventoryPortletKeys.PARTS,
-		"mvc.command.name=" + MVCCommandNames.DELETE_PART
+		"javax.portlet.name=" + InventoryPortletKeys.MANUFACTURER,
+		"mvc.command.name=" + MVCCommandNames.DELETE_MANUFACTURER
 	},
 	service = MVCActionCommand.class
 )
-public class DeletePartMVCActionCommand extends BaseMVCActionCommand {
+public class DeleteManufacturerMVCActionCommand extends BaseMVCActionCommand {
 
 	@Override
 	public void doProcessAction(ActionRequest request, ActionResponse response)
@@ -36,36 +37,29 @@ public class DeletePartMVCActionCommand extends BaseMVCActionCommand {
 										.getAttribute(WebKeys.THEME_DISPLAY);
 		long groupId = themeDisplay.getScopeGroupId();
 
-		long partId = ParamUtil.getLong(request, "partId");
+		long manufacturerId = ParamUtil.getLong(request, "manufacturerId");
 
 		if (themeDisplay.getPermissionChecker().hasPermission(groupId,
-										"com.liferay.training.parts.model.Part",
-										partId, "DELETE")) {
+										"com.liferay.training.parts.model.Manufacturer",
+										manufacturerId, "DELETE")) {
 
-			if (Validator.isNotNull(partId)) {
+			if (Validator.isNotNull(manufacturerId)) {
+				_manufacturerLocalService.deleteManufacturer(manufacturerId);
 
-				try {
-					_partLocalService.deletePart(partId);
-				}
-				catch (PortalException e) {
-					_log.error(e);
-				}
-
-				SessionMessages.add(request, "part-deleted");
+				SessionMessages.add(request, "manufacturer-deleted");
 
 				sendRedirect(request, response);
 			} else {
-				SessionErrors.add(request, "deletion-error");
+				SessionErrors.add(request, "error-deleting");
 			}
 		} else {
 			SessionErrors.add(request, "permission-error");
 			sendRedirect(request, response);
-
 		}
 	}
 
 	@Reference
-	private PartLocalService _partLocalService;
+	private ManufacturerLocalService _manufacturerLocalService;
 
-	private static final Log _log = LogFactoryUtil.getLog(DeletePartMVCActionCommand.class);
+	private static final Log _log = LogFactoryUtil.getLog(DeleteManufacturerMVCActionCommand.class);
 }

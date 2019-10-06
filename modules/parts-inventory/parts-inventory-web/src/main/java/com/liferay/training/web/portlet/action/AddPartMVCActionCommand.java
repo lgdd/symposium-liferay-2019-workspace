@@ -16,7 +16,7 @@ import com.liferay.training.parts.model.Part;
 import com.liferay.training.parts.service.PartLocalService;
 import com.liferay.training.parts.service.PartLocalServiceUtil;
 import com.liferay.training.web.constants.MVCCommandNames;
-import com.liferay.training.web.constants.PartsPortletKeys;
+import com.liferay.training.web.constants.InventoryPortletKeys;
 import com.liferay.training.web.validator.PartValidator;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -28,7 +28,7 @@ import java.util.*;
 @Component(
 	immediate = true,
 	property = {
-		"javax.portlet.name=" + PartsPortletKeys.PARTS,
+		"javax.portlet.name=" + InventoryPortletKeys.PARTS,
 		"mvc.command.name=" + MVCCommandNames.ADD_PART
 	},
 	service = MVCActionCommand.class

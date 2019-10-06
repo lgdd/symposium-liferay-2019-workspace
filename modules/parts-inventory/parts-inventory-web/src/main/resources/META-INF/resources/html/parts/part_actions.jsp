@@ -28,13 +28,14 @@
 
 	<c:if
 		test="<%= partPermissionChecker.contains(permissionChecker, scopeGroupId, partId, ActionKeys.DELETE) %>">
-		<portlet:actionURL name="deletePart" var="deleteURL">
+
+		<portlet:actionURL name="<%=MVCCommandNames.DELETE_PART %>" var="deleteURL">
 			<portlet:param name="partId" value="<%= String.valueOf(partId) %>" />
 			<portlet:param name="redirect"
-				value="<%= PortalUtil.getCurrentURL(renderRequest) %>" />
+						   value="<%= PortalUtil.getCurrentURL(renderRequest) %>" />
 		</portlet:actionURL>
 
-		<liferay-ui:icon-delete url="<%=deleteURL.toString() %>" />
+		<liferay-ui:icon-delete image="delete" url="<%=deleteURL.toString() %>" />
 	</c:if>
 
 	<c:if test="<%= partPermissionChecker.contains(permissionChecker, scopeGroupId, partId, ActionKeys.PERMISSIONS) %>">
