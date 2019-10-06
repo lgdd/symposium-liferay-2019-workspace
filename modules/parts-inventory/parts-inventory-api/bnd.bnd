@@ -6,6 +6,6 @@ Export-Package: \
 	com.liferay.training.parts.model,\
 	com.liferay.training.parts.service,\
 	com.liferay.training.parts.service.persistence,\
-	com.liferay.training.parts.permission
+	com.liferay.training.parts.service.permission
 -check: EXPORTS
 -includeresource: META-INF/service.xml=../parts-inventory-service/service.xml
