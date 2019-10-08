@@ -56,8 +56,6 @@ public class AddManufacturerMVCActionCommand extends BaseMVCActionCommand {
 			manufacturer.setGroupId(themeDisplay.getScopeGroupId());
 			manufacturer.setUserId(themeDisplay.getUserId());
 
-			_log.error(manufacturer.toString());
-
 			List<String> errors = new ArrayList<>();
 
 			if (ManufacturerValidator
